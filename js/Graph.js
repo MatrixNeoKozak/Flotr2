@@ -290,6 +290,7 @@ Graph.prototype = {
         height      : this.plotHeight,
         fontSize    : this.options.fontSize,
         fontColor   : this.options.fontColor,
+        plotOffset  : this.plotOffset,
         textEnabled : this.textEnabled,
         htmlText    : this.options.HtmlText,
         text        : this._text, // TODO Is this necessary?

@@ -47,7 +47,8 @@ Flotr.addType('markers', {
       stackOffset,
       i, x, y, label,
       html            = [],
-      divStyle, div;
+      plotOffset      = options.plotOffset || {left: 0, top: 0},
+      div;
 
     context.save();
     context.lineJoin = 'round';
@@ -88,7 +89,7 @@ Flotr.addType('markers', {
     }
 
     if (options.htmlText || !options.textEnabled) {
-      div = Flotr.DOM.node('<div style="color:' + options.color + '" class="flotr-labels"></div>');
+      div = Flotr.DOM.node('<div style="position:absolute;left:' + plotOffset.left + 'px;top:' + plotOffset.top + 'px;color:' + options.color + '" class="flotr-labels"></div>');
       Flotr.DOM.insert(div, html.join(''));
       Flotr.DOM.insert(options.element, div);
     }
@@ -109,12 +110,13 @@ Flotr.addType('markers', {
         margin = 2,
         left = x,
         top = y,
+        htmlStyle = 'font-size:' + (options.fontSize * 1.3) + 'px;font-family:sans-serif;white-space:pre-line;',
         dim;
 
     if (isImage(label))
         dim = {height : label.height, width: label.width};
     else if (options.htmlText || !options.textEnabled) {
-      dim = options.text.dimensions(label, {size: options.fontSize}, '', 'flotr-grid-label');
+      dim = options.text.html(label, options.element, htmlStyle, 'flotr-grid-label');
     } else
       dim = options.text.canvas(label);
 
@@ -140,7 +142,7 @@ Flotr.addType('markers', {
     if (isImage(label))
       context.drawImage(label, parseInt(left+margin, 10), parseInt(top+margin, 10));
     else if (options.htmlText || !options.textEnabled) {
-      html.push('<div style="position:absolute;left:' + (left + margin) + 'px;top:' + (top + margin) + 'px;" class="flotr-grid-label">' + label + '</div>');
+      html.push('<div style="position:absolute;left:' + (left + margin) + 'px;top:' + (top + margin) + 'px;' + htmlStyle + '" class="flotr-grid-label">' + label + '</div>');
     } else
       Flotr.drawText(context, label, left+margin, top+margin, {textBaseline: 'top', textAlign: 'left', size: options.fontSize, color: options.color});
   }
